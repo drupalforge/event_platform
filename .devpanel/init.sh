@@ -79,6 +79,24 @@ else
   time drush -n updb
 fi
 
+#== Install and set up Event Platform and Event Horizon.
+drush en event_platform -y
+drush en moderation_state_condition
+drush thin event_horizon
+drush config:set system.theme default event_horizon -y
+drush recipe ../recipes/event_platform_example
+drush en event_platform_flag
+
+#== Add some admin extras.
+drush en keysave
+drush en navigation_extra_tools -y
+
+#== Add some Drupal CMS recipes.
+drush recipe ../recipes/drupal_cms_admin_ui
+drush recipe ../recipes/drupal_cms_anti_spam
+drush recipe ../recipes/drupal_cms_seo_basic
+drush recipe ../recipes/drupal_cms_image
+
 #== Warm up caches.
 echo
 echo 'Run cron.'

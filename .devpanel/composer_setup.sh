@@ -26,3 +26,6 @@ composer config scripts.post-drupal-scaffold-cmd \
 
 # Add Drush and Composer Patches.
 composer require -n --no-update drush/drush cweagans/composer-patches:^2@beta
+
+# Add Event Platform Starter.
+composer require -n --no-update drupal/event_platform_starter:^1@beta
