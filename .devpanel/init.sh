@@ -40,7 +40,7 @@ else
   time source .devpanel/composer_setup.sh
   echo
 fi
-time composer -n install --no-dev --no-progress
+time composer install -n --no-dev --no-progress
 
 #== Create the private files directory.
 if [ ! -d private ]; then
@@ -69,6 +69,24 @@ if [ -z "$(drush status --field=db-status)" ]; then
   echo 'Install Drupal.'
   time drush -n si
 
+  #== Install and set up Event Platform and Event Horizon.
+  time drush -n en event_platform
+  time drush -n en moderation_state_condition
+  drush -n thin event_horizon
+  drush -n cset system.theme default event_horizon
+  time drush -n recipe ../recipes/event_platform_example
+  time drush -n en event_platform_flag
+
+  #== Add some admin extras.
+  time drush -n en keysave
+  time drush -n en navigation_extra_tools -y
+
+  #== Add some Drupal CMS recipes.
+  time drush -n recipe ../recipes/drupal_cms_admin_ui
+  time drush -n recipe ../recipes/drupal_cms_anti_spam
+  time drush -n recipe ../recipes/drupal_cms_seo_basic
+  time drush -n recipe ../recipes/drupal_cms_image
+
   echo
   echo 'Tell Automatic Updates about patches.'
   drush -n cset --input-format=yaml package_manager.settings additional_trusted_composer_plugins '["cweagans/composer-patches"]'
@@ -78,24 +96,6 @@ else
   echo 'Update database.'
   time drush -n updb
 fi
-
-#== Install and set up Event Platform and Event Horizon.
-drush en event_platform -y
-drush en moderation_state_condition
-drush thin event_horizon
-drush config:set system.theme default event_horizon -y
-drush recipe ../recipes/event_platform_example
-drush en event_platform_flag
-
-#== Add some admin extras.
-drush en keysave
-drush en navigation_extra_tools -y
-
-#== Add some Drupal CMS recipes.
-drush recipe ../recipes/drupal_cms_admin_ui
-drush recipe ../recipes/drupal_cms_anti_spam
-drush recipe ../recipes/drupal_cms_seo_basic
-drush recipe ../recipes/drupal_cms_image
 
 #== Warm up caches.
 echo

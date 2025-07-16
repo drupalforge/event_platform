@@ -24,11 +24,9 @@ composer config -jm extra.drupal-scaffold.file-mapping '{
 composer config scripts.post-drupal-scaffold-cmd \
     'cd web/sites/default && test -z "$(grep '\''include \$devpanel_settings;'\'' settings.php)" && patch -Np1 -r /dev/null < $APP_ROOT/.devpanel/drupal-settings.patch || :'
 
-# Add Drush and Composer Patches.
-composer require -n --no-update drush/drush cweagans/composer-patches:^2@beta
-
-# Add Event Platform Starter.
+# Add Drush, Composer Patches and Event Platform Starter.
 composer config minimum-stability alpha
-composer require -n --no-update drupal/event_platform_starter:^1@beta
-
-composer update --lock --no-plugins --no-install
+composer require -n --no-plugins --no-install \
+    drush/drush \
+    cweagans/composer-patches:^2@beta \
+    drupal/event_platform_starter:^1@beta
