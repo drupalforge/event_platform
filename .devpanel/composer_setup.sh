@@ -11,9 +11,6 @@ composer create-project -n --no-install ${PROJECT:=drupal/recommended-project}
 cp -r "${PROJECT#*/}"/* ./
 rm -rf "${PROJECT#*/}" patches.lock.json
 
-# Programmatically fix Composer 2.2 allow-plugins to avoid errors
-composer config --no-plugins allow-plugins.cweagans/composer-patches true
-
 # Scaffold settings.php.
 composer config -jm extra.drupal-scaffold.file-mapping '{
     "[web-root]/sites/default/settings.php": {
@@ -24,9 +21,8 @@ composer config -jm extra.drupal-scaffold.file-mapping '{
 composer config scripts.post-drupal-scaffold-cmd \
     'cd web/sites/default && test -z "$(grep '\''include \$devpanel_settings;'\'' settings.php)" && patch -Np1 -r /dev/null < $APP_ROOT/.devpanel/drupal-settings.patch || :'
 
-# Add Drush, Composer Patches and Event Platform Starter.
+# Add Drush and Event Platform Starter.
 composer config minimum-stability alpha
 composer require -n --no-plugins --no-install \
     drush/drush \
-    cweagans/composer-patches:^2@beta \
     drupal/event_platform_starter:^1@beta

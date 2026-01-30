@@ -74,7 +74,7 @@ if [ -z "$(drush status --field=db-status)" ]; then
   time drush -n en moderation_state_condition
   drush -n thin event_horizon
   drush -n cset system.theme default event_horizon
-  time drush -n recipe ../recipes/event_platform_example
+  time drush -q recipe ../recipes/event_platform_example
   time drush -n en event_platform_flag
 
   #== Add some admin extras.
@@ -82,16 +82,10 @@ if [ -z "$(drush status --field=db-status)" ]; then
   time drush -n en navigation_extra_tools -y
 
   #== Add some Drupal CMS recipes.
-  time drush -n recipe ../recipes/drupal_cms_admin_ui
-  time drush -n recipe ../recipes/drupal_cms_anti_spam
-  time drush -n recipe ../recipes/drupal_cms_seo_basic
-  time drush -n recipe ../recipes/drupal_cms_image
-
-  echo
-  echo 'Tell Automatic Updates about patches.'
-  drush -n cset --input-format=yaml package_manager.settings additional_trusted_composer_plugins '["cweagans/composer-patches"]'
-  drush -n cset --input-format=yaml package_manager.settings additional_known_files_in_project_root '["patches.json", "patches.lock.json"]'
-  time drush ev '\Drupal::moduleHandler()->invoke("automatic_updates", "modules_installed", [[], FALSE])'
+  time drush -q recipe ../recipes/drupal_cms_admin_ui
+  time drush -q recipe ../recipes/drupal_cms_anti_spam
+  time drush -q recipe ../recipes/drupal_cms_seo_basic
+  time drush -q recipe ../recipes/drupal_cms_image
 else
   echo 'Update database.'
   time drush -n updb
