@@ -6,10 +6,10 @@
 set -eu -o pipefail
 cd $APP_ROOT
 
-# Create required composer.json and composer.lock files
-composer create-project -n --no-install ${PROJECT:=drupal/recommended-project}
-cp -r "${PROJECT#*/}"/* ./
-rm -rf "${PROJECT#*/}" patches.lock.json
+# Create required composer.json and composer.lock files.
+composer create-project --no-install ${PROJECT:=drupal/recommended-project}
+cp -r ${PROJECT#*/}/* ./
+rm -rf ${PROJECT#*/}
 
 # Scaffold settings.php.
 composer config -jm extra.drupal-scaffold.file-mapping '{
