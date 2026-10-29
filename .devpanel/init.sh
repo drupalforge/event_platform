@@ -57,6 +57,7 @@ echo
 if [ -z "$(drush status --field=db-status)" ]; then
   echo 'Install Drupal.'
   time drush -n si
+  time drush -q recipe core/recipes/article_content_type
 
   #== Install and set up Event Platform and Event Horizon.
   time drush -n en event_platform
