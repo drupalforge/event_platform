@@ -60,6 +60,7 @@ if [ -z "$(drush status --field=db-status)" ]; then
   time drush -q recipe core/recipes/article_content_type
 
   #== Install and set up Event Platform and Event Horizon.
+  time drush -n en toolbar
   time drush -n en event_platform
   time drush -n en moderation_state_condition
   drush -n thin event_horizon
